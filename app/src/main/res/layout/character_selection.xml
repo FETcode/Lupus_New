@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#e15258">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/whatCharacter"
+        android:textSize="45sp"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:id="@+id/questionCharacter"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp" />
+
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="@string/demoniac"
+        android:id="@+id/demoniac"
+        android:onClick="onClick"
+        android:layout_alignTop="@+id/guard"
+        android:layout_toStartOf="@+id/guard" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="@string/guard"
+        android:id="@+id/guard"
+        android:onClick="onClick"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="@string/masons"
+        android:id="@+id/masons"
+        android:onClick="onClick"
+        android:layout_alignTop="@+id/guard"
+        android:layout_toEndOf="@+id/guard" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="@string/medium"
+        android:id="@+id/medium"
+        android:onClick="onClick"
+        android:layout_below="@+id/demoniac"
+        android:layout_alignStart="@+id/demoniac" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="@string/villager"
+        android:id="@+id/villager"
+        android:onClick="onClick"
+        android:layout_alignTop="@+id/medium"
+        android:layout_toEndOf="@+id/medium" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="@string/werehamster"
+        android:id="@+id/werehamster"
+        android:onClick="onClick"
+        android:layout_alignBottom="@+id/villager"
+        android:layout_toEndOf="@+id/villager" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="@string/add"
+        android:id="@+id/add"
+        android:onClick="onClick"
+        android:enabled="false"
+        android:layout_marginTop="36dp"
+        android:layout_below="@+id/medium"
+        android:layout_alignStart="@+id/medium" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="@string/remove"
+        android:id="@+id/remove"
+        android:onClick="onClick"
+        android:layout_alignBottom="@+id/add"
+        android:layout_alignEnd="@+id/werehamster" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="@string/finish"
+        android:id="@+id/finish"
+        android:onClick="onClick"
+        android:visibility="gone"
+        android:layout_alignBottom="@+id/add"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/zero"
+        android:id="@+id/count"
+        android:textSize="45sp"
+        android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>

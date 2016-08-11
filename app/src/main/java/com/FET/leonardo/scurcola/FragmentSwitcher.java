@@ -39,6 +39,7 @@ package com.FET.leonardo.scurcola;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 
 import com.FET.leonardo.scurcola.fragment.CharacterSelectionFragment;
 import com.FET.leonardo.scurcola.fragment.GameFragment;
@@ -140,9 +141,14 @@ public class FragmentSwitcher {
         transact();
     }
 
+    public void back(){
+        fragmentManager.popBackStackImmediate();
+    }
+
     private void transact() {
-        //TODO add animation here
-        fragmentManager.beginTransaction().replace(android.R.id.content, currentFragment).commit();
+//TODO add animation here
+
+        fragmentManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).replace(android.R.id.content, currentFragment).addToBackStack(null).commit();
     }
 
     public Fragment getCurrentFragment() {

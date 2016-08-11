@@ -89,7 +89,7 @@ public class ListPlayersClairvoyantFragment extends Fragment {
                 Player player = playersNoClairvoyant.get(position);
                 boolean isWolf = provider.probe(player);
                 provider.getMessages().add(player.getName() + (isWolf ? "" : " non") + " è un lupo!");
-                provider.getFragmentSwitcher().game();
+                provider.getFragmentSwitcher().back();
             }
         });
         myList.setAdapter(adapter);

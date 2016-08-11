@@ -40,6 +40,7 @@
 package com.FET.leonardo.scurcola;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -120,7 +121,7 @@ public class FragmentActivity extends AppCompatActivity implements DataProvider,
         // Initialize Lists
         initializeLists();
 
-        SharedPreferences prefs = getSharedPreferences("X", MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences("X", Context.MODE_PRIVATE);
         Gson gson = new Gson();
         // Restore value of members from saved state
         village = prefs.getString(VILLAGE, "");

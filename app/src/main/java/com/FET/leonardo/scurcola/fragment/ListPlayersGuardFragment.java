@@ -88,7 +88,7 @@ public class ListPlayersGuardFragment extends Fragment {
             public void onEntryClick(View view, int position) {
                 Player player = playersNoGuard.get(position);
                 player.setProtected(true);
-                provider.getFragmentSwitcher().game();
+                provider.getFragmentSwitcher().back();
             }
         });
         myList.setAdapter(adapter);

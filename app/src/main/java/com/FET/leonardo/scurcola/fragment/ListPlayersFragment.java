@@ -87,7 +87,7 @@ public class ListPlayersFragment extends Fragment implements View.OnClickListene
     }
 
     public void onClick(View v) {
-        provider.getFragmentSwitcher().game();
+        provider.getFragmentSwitcher().back();
         }
     }
 

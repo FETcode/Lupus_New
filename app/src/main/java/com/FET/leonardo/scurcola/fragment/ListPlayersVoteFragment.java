@@ -106,7 +106,7 @@ public class ListPlayersVoteFragment extends Fragment {
                         provider.getHighestVotedPlayers().add(second);
                         provider.getMessages().add(second.getName());
                     }
-                    provider.getFragmentSwitcher().game();
+                    provider.getFragmentSwitcher().back();
                 }
             }
         });

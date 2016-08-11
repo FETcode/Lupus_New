@@ -50,6 +50,7 @@ import com.FET.leonardo.scurcola.Card;
 import com.FET.leonardo.scurcola.DataProvider;
 import com.FET.leonardo.scurcola.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -118,6 +119,8 @@ public class CharacterSelectionFragment extends Fragment implements View.OnClick
 
         isAdding = true;
 
+        buttonList = new ArrayList<>();
+
         buttonList.add(demoniac);
         buttonList.add(guard);
         buttonList.add(masons);
@@ -157,21 +160,27 @@ public class CharacterSelectionFragment extends Fragment implements View.OnClick
                 break;
             case R.id.demoniac:
                 demoniacCounter += isAdding ? 1 : -1;
+                checkNoMorePlayers();
                 break;
             case R.id.guard:
                 guardCounter += isAdding ? 1 : -1;
+                checkNoMorePlayers();
                 break;
             case R.id.masons:
                 masonsCounter += isAdding ? 2 : -2;
+                checkNoMorePlayers();
                 break;
             case R.id.medium:
                 mediumCounter += isAdding ? 1 : -1;
+                checkNoMorePlayers();
                 break;
             case R.id.werehamster:
                 werehamsterCounter += isAdding ? 1 : -1;
+                checkNoMorePlayers();
                 break;
             case R.id.villager:
                 villagerCounter += isAdding ? 1 : -1;
+                checkNoMorePlayers();
                 break;
             case R.id.finish:
                 List<Card> characters = provider.getCharacters();
@@ -187,14 +196,17 @@ public class CharacterSelectionFragment extends Fragment implements View.OnClick
                 provider.getFragmentSwitcher().randomAssignment();
                 break;
             default:
-                if(countText.getText().toString().equals("0")){ // If amount of characters picked == 0, disable every button and add the finish one
-                    for(Button b : buttonList) {
-                        b.setEnabled(false);
-                    }
-                    finish.setVisibility(View.VISIBLE);
-                }
                 break;
         }
         updateViews();
+    }
+
+    private void checkNoMorePlayers() {
+        if(countText.getText().toString().equals("0")){ // If amount of characters picked == 0, disable every button and add the finish one
+            for(Button b : buttonList) {
+                b.setEnabled(false);
+            }
+            finish.setVisibility(View.VISIBLE);
+        }
     }
 }

@@ -27,8 +27,8 @@
 
 
     <!-- Village -->
-    <string name="village">In che paese vi trovate?</string>
-    <string name="villageText">Scurcola</string>
+    <string name="village">In che villaggio vi trovate?</string>
+    <string name="villageText">Nome villaggio</string>
 
 
     <!-- Characters -->
@@ -46,7 +46,8 @@
     <string name="howManyPlayers">In quanti giocate?</string>
     <string name="whoMaster">Chi è il Master?</string>
     <string name="whoPlays">Chi gioca?</string>
-    <string name="master">Leonardo</string>
+    <string name="master">Nome Master</string>
+    <string name="player">Nome Giocatore</string>
     <string name="whoIsPlaying">Chi gioca?</string>
 
 

@@ -70,7 +70,7 @@ public class NameSelectionFragment extends Fragment implements View.OnClickListe
     private Button next;
     private Button back;
     private Button finish;
-    private EditText namesDisplay; // Where the user enter the names
+    private EditText namesDisplay; // Where the user enters the names
     private TextView whoIsMaster; // Our question to the user
     private TextView playersLeft;
     private Master master;
@@ -140,8 +140,8 @@ public class NameSelectionFragment extends Fragment implements View.OnClickListe
                 finish.setVisibility(View.GONE); // and hide the Finish one.
                 back.setEnabled(true);
                 whoIsMaster.setText(R.string.whoIsPlaying); // and edit our question properly.
+                namesDisplay.setHint(R.string.player);
 
-                //TODO do something with master, currently it is not used anywhere
                 master = new Master(getActivity());// Create the Master
                 master.setName(name);
                 namesDisplay.setText(""); // Clear the text area
@@ -152,6 +152,8 @@ public class NameSelectionFragment extends Fragment implements View.OnClickListe
             } else { // If the names are being chosen,
                 back.setEnabled(true); // we want to be able to remove previous names,
                 whoIsMaster.setText(R.string.whoIsPlaying); // and edit our question properly.
+                namesDisplay.setHint(R.string.player);
+
                 Player player = new Player();
                 player.setName(name);
                 players.add(player); // Add the name to the list
@@ -177,6 +179,7 @@ public class NameSelectionFragment extends Fragment implements View.OnClickListe
         if (players.size() == 0) { // If we're back to 0,
             back.setEnabled(false); // disable the Back button,
             whoIsMaster.setText(R.string.whoMaster); // and change the question
+            namesDisplay.setHint(R.string.master);
             playersLeft.setText(String.valueOf(provider.getPlayerCount())); // Display the default value
             master = null;
         } else {

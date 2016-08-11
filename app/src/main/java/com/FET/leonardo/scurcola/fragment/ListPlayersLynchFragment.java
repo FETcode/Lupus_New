@@ -106,7 +106,7 @@ public class ListPlayersLynchFragment extends Fragment {
                     for (Player v : highest){
                         v.setCount(0);
                     }
-                    provider.getFragmentSwitcher().game();
+                    provider.getFragmentSwitcher().back();
                 }
             }
         });

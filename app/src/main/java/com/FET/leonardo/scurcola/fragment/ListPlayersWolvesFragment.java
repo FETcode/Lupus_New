@@ -88,7 +88,7 @@ public class ListPlayersWolvesFragment extends Fragment {
             public void onEntryClick(View view, int position) {
                 Player player = playersNoWolves.get(position);
                 provider.savage(player);
-                provider.getFragmentSwitcher().game();
+                provider.getFragmentSwitcher().back();
             }
         });
         myList.setAdapter(adapter);

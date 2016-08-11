@@ -68,6 +68,5 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         SharedPreferences preferences = getActivity().getSharedPreferences("X", Context.MODE_PRIVATE);
         preferences.edit().clear().apply();
         provider.getFragmentSwitcher().village();
-
     }
 }

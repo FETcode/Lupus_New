@@ -67,6 +67,12 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         SharedPreferences preferences = getActivity().getSharedPreferences("X", Context.MODE_PRIVATE);
         preferences.edit().clear().apply();
+
+        // Debugging
+        System.out.println("[-------------------- DEBUGGING LUPUS --------------------]");
+        System.out.println("[+] Cleared!");
+        //
+
         provider.getFragmentSwitcher().village();
     }
 }

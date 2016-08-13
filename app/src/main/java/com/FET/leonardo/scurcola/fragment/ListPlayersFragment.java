@@ -86,8 +86,17 @@ public class ListPlayersFragment extends Fragment implements View.OnClickListene
         return v;
     }
 
+    @Override
     public void onClick(View v) {
-        provider.getFragmentSwitcher().back();
+        switch (v.getId()){
+            case R.id.backToGame:
+                provider.getFragmentSwitcher().back();
+                System.out.println("Back executed.");
+                break;
+            default:
+                System.out.println("Default executed.");
+                break;
+        }
         }
     }
 

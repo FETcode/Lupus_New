@@ -54,7 +54,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Updated on 20.07.2016.
+ * Created on 20.07.2016.
  *
  * @author F43nd1r
  */
@@ -72,14 +72,14 @@ public class FragmentActivity extends AppCompatActivity implements DataProvider,
     private static final String DAY_COUNTER = "DAY_COUNTER";
     private static final String NIGHT_INSIDE_COUNTER = "NIGHT_INSIDE_COUNTER";
     private static final String DAY_INSIDE_COUNTER = "DAY_INSIDE_COUNTER";
-    private static final String WOLVES_LEFT = "WOLVES_LEFT";
-    private static final String VILLAGERS_LEFT = "VILLAGERS_LEFT";
     private static final String NIGHT = "NIGHT";
 
     private static final String GOOD_WIN = "GOOD_WIN";
     private static final String LAST_TEXT = "LAST_TEXT";
     private static final String PLAYER_COUNT = "PLAYER_COUNT";
     private static final String CHARACTERS = "CHARACTERS";
+
+    private static final String LAST_FRAGMENT_CLASS_NAME = "LAST_FRAGMENT";
 
 
     private List<Player> players; // All the active players
@@ -98,8 +98,6 @@ public class FragmentActivity extends AppCompatActivity implements DataProvider,
     private int dayCounter;
     private int nightInsideCounter;
     private int dayInsideCounter;
-    private int wolvesLeft;
-    private int villagersLeft;
     private boolean night;
 
     private boolean isGoodEnd;
@@ -118,8 +116,6 @@ public class FragmentActivity extends AppCompatActivity implements DataProvider,
 
         // Probably initialize members with default values for a new instance
         initializeVariables();
-        // Initialize Lists
-        initializeLists();
 
         SharedPreferences prefs = getSharedPreferences("X", Context.MODE_PRIVATE);
         Gson gson = new Gson();
@@ -132,10 +128,8 @@ public class FragmentActivity extends AppCompatActivity implements DataProvider,
         String highestJSON = prefs.getString(HIGHEST, null);
         String messagesJSON = prefs.getString(MESSAGES, null);
 
-        // Players
         String lastLynchedJSON = prefs.getString(LAST_LYNCHED, null);
 
-        // Types
         Type type = new TypeToken<List<Player>>() {
         }.getType();
         Type type1 = new TypeToken<Player>() {
@@ -145,7 +139,6 @@ public class FragmentActivity extends AppCompatActivity implements DataProvider,
         Type cardList = new TypeToken<ArrayList<Card>>() {
         }.getType();
 
-        // Restore
         if (playersJSON != null) {
             players = gson.fromJson(playersJSON, type);
         }
@@ -158,6 +151,7 @@ public class FragmentActivity extends AppCompatActivity implements DataProvider,
         if (messagesJSON != null) {
             messages = gson.fromJson(messagesJSON, arrayListString);
         }
+        // Players
         if (lastLynchedJSON != null) {
             lastLynched = gson.fromJson(lastLynchedJSON, type1);
         }
@@ -167,8 +161,6 @@ public class FragmentActivity extends AppCompatActivity implements DataProvider,
         dayCounter = prefs.getInt(DAY_COUNTER, 1);
         nightInsideCounter = prefs.getInt(NIGHT_INSIDE_COUNTER, 1);
         dayInsideCounter = prefs.getInt(DAY_INSIDE_COUNTER, 1);
-        wolvesLeft = prefs.getInt(WOLVES_LEFT, 0);
-        villagersLeft = prefs.getInt(VILLAGERS_LEFT, 0);
         night = prefs.getBoolean(NIGHT, true);
 
         isGoodEnd = prefs.getBoolean(GOOD_WIN, false);
@@ -179,6 +171,11 @@ public class FragmentActivity extends AppCompatActivity implements DataProvider,
             characters = gson.fromJson(charactersJSON, cardList);
         }
 
+
+           String lastFragmentClassName = prefs.getString(LAST_FRAGMENT_CLASS_NAME, null);
+        /*if (lastFragmentClassName == null || !fragmentSwitcher.loadFragmentByClassName(lastFragmentClassName)) {
+            fragmentSwitcher.main();
+        }*/
         fragmentSwitcher.main();
     }
 
@@ -190,40 +187,17 @@ public class FragmentActivity extends AppCompatActivity implements DataProvider,
         nightInsideCounter = 1;
         dayInsideCounter = 1;
         night = true;
-        wolvesLeft = 0;
-        villagersLeft = 0;
         recentlyKilled = new ArrayList<>();
         highest = new ArrayList<>();
         players = new ArrayList<>();
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            village = bundle.getString(VILLAGE);
-            players = getIntent().getParcelableArrayListExtra("PLAYERS"); // Active players
-        }
-        for (Player player : players) { // WolvesLeft
-            if (player.getCard() == Card.Wolf) {
-                wolvesLeft++;
-            }
-        }
-        for (Player player : players) {
-            if (player.getCard() == Card.Villager) {
-                villagersLeft++;
-            }
-        }
         characters = new ArrayList<>();
-    }
-
-    private void initializeLists() {
-        for (Player player : players) {
-            System.out.println(player.getCard().name());
-        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
 
-        SharedPreferences prefs = getSharedPreferences("X", MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences("X", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         Gson gson = new Gson();
 
@@ -248,8 +222,6 @@ public class FragmentActivity extends AppCompatActivity implements DataProvider,
         editor.putInt(DAY_COUNTER, dayCounter);
         editor.putInt(NIGHT_INSIDE_COUNTER, nightInsideCounter);
         editor.putInt(DAY_INSIDE_COUNTER, dayInsideCounter);
-        editor.putInt(WOLVES_LEFT, wolvesLeft);
-        editor.putInt(VILLAGERS_LEFT, villagersLeft);
         editor.putBoolean(NIGHT, night);
 
         editor.putBoolean(GOOD_WIN, isGoodEnd);
@@ -258,7 +230,7 @@ public class FragmentActivity extends AppCompatActivity implements DataProvider,
         editor.putString(CHARACTERS, gson.toJson(characters));
 
 
-        editor.putString("lastActivity", getClass().getName());
+        editor.putString(LAST_FRAGMENT_CLASS_NAME, fragmentSwitcher.getCurrentFragment().getClass().getName());
         editor.apply();
     }
 
@@ -314,8 +286,8 @@ public class FragmentActivity extends AppCompatActivity implements DataProvider,
 
     @Override
     public Player getClairvoyant() {
-        for(Player p : players){
-            if(p.getCard() == Card.Clairvoyant) {
+        for (Player p : players) {
+            if (p.getCard() == Card.Clairvoyant) {
                 return p;
             }
         }
@@ -324,8 +296,8 @@ public class FragmentActivity extends AppCompatActivity implements DataProvider,
 
     @Override
     public Player getGuard() {
-        for(Player p : players){
-            if(p.getCard() == Card.Guard) {
+        for (Player p : players) {
+            if (p.getCard() == Card.Guard) {
                 return p;
             }
         }
@@ -334,8 +306,8 @@ public class FragmentActivity extends AppCompatActivity implements DataProvider,
 
     @Override
     public Player getMedium() {
-        for(Player p : players){
-            if(p.getCard() == Card.Medium) {
+        for (Player p : players) {
+            if (p.getCard() == Card.Medium) {
                 return p;
             }
         }
@@ -409,7 +381,7 @@ public class FragmentActivity extends AppCompatActivity implements DataProvider,
 
     @Override
     public int getWolvesLeft() {
-        wolvesLeft = 0;
+        int wolvesLeft = 0;
         for (Player player : players) {
             if (player.getCard() == Card.Wolf) {
                 wolvesLeft++;
@@ -420,7 +392,7 @@ public class FragmentActivity extends AppCompatActivity implements DataProvider,
 
     @Override
     public int getVillagersLeft() {
-        villagersLeft = 0;
+        int villagersLeft = 0;
         for (Player player : players) {
             if (player.getCard() != Card.Wolf) {
                 villagersLeft++;

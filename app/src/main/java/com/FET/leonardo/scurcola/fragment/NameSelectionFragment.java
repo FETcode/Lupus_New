@@ -81,6 +81,11 @@ public class NameSelectionFragment extends Fragment implements View.OnClickListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
+        System.out.println("[---------------------------------------------------------]");
+        System.out.println("[-------------------- DEBUGGING LUPUS --------------------]");
+        System.out.println("[----------------- NameSelectionFragment -----------------]");
+        System.out.println("[---------------------------------------------------------]");
+
         provider = (DataProvider) getActivity();
         View v = inflater.inflate(R.layout.name_selection, container, false);
         namesDisplay = (EditText) v.findViewById(R.id.names);
@@ -171,6 +176,11 @@ public class NameSelectionFragment extends Fragment implements View.OnClickListe
     }
 
     private void setPlayersLeft() {
+
+        System.out.println("[+] PLAYERS: " + provider.getPlayerCount());
+        System.out.println("[+] PLAYERS LIST SIZE: " + players.size());
+        System.out.println("[---------------------------------------------------------]");
+
         playersLeft.setText(String.valueOf(provider.getPlayerCount() - players.size() - (master == null ? 0 : 1)));
     }
 

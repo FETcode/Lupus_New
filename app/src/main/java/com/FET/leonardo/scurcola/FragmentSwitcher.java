@@ -145,6 +145,17 @@ public class FragmentSwitcher {
         fragmentManager.popBackStackImmediate();
     }
 
+    public boolean loadFragmentByClassName(String className){
+        try {
+            currentFragment = (Fragment) Class.forName(className).newInstance();
+            transact();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     private void transact() {
 //TODO add animation here
 

@@ -88,7 +88,7 @@ public class CharacterSelectionFragment extends Fragment implements View.OnClick
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         provider = (DataProvider) getActivity();
         View v = inflater.inflate(R.layout.character_selection, container, false);
-        initializeVariables();
+
         demoniac = (Button) v.findViewById(R.id.demoniac);
         guard = (Button) v.findViewById(R.id.guard);
         masons = (Button) v.findViewById(R.id.masons);
@@ -99,7 +99,19 @@ public class CharacterSelectionFragment extends Fragment implements View.OnClick
         remove = (Button) v.findViewById(R.id.remove);
         finish = (Button) v.findViewById(R.id.finish);
         countText = (TextView) v.findViewById(R.id.count);
+        initializeVariables();
         updateViews();
+
+        System.out.println("[+] PLAYERS: " + provider.getPlayerCount());
+        System.out.println("[+] DEMONIAC: " + demoniacCounter);
+        System.out.println("[+] GUARD: " + guardCounter);
+        System.out.println("[+] MASONS: " + masonsCounter);
+        System.out.println("[+] MEDIUM: " + mediumCounter);
+        System.out.println("[+] VILLAGERS: " + villagerCounter);
+        System.out.println("[+] WEREHAMSTER: " + werehamsterCounter);
+
+        System.out.println("[---------------------------------------------------------]");
+
         return v;
     }
 
@@ -132,6 +144,7 @@ public class CharacterSelectionFragment extends Fragment implements View.OnClick
     }
 
     private void updateViews() {
+        // Characters Buttons
         demoniac.setEnabled(demoniacCounter == 0 == isAdding);
         guard.setEnabled(guardCounter == 0 == isAdding);
         masons.setEnabled(masonsCounter == 0 == isAdding);
@@ -142,11 +155,42 @@ public class CharacterSelectionFragment extends Fragment implements View.OnClick
                 || villagerCounter > 5);
         add.setEnabled(!isAdding);
         remove.setEnabled(isAdding);
+        // Finish button
         finish.setVisibility(demoniacCounter + guardCounter + masonsCounter + mediumCounter
-                + villagerCounter + werehamsterCounter == provider.getPlayerCount()
+                + villagerCounter + werehamsterCounter + wolfCounter + clairvoyantCounter == provider.getPlayerCount() - 1 // Removed the Master
                 ? View.VISIBLE : View.GONE);
-        countText.setText(String.valueOf(provider.getPlayerCount() - demoniacCounter - guardCounter
-                - masonsCounter - mediumCounter - villagerCounter - werehamsterCounter));
+        // Update counter TextView
+        countText.setText(String.valueOf(provider.getPlayerCount() -1 // Removed the Master
+                - demoniacCounter - guardCounter
+                - masonsCounter - mediumCounter - villagerCounter - werehamsterCounter - wolfCounter - clairvoyantCounter));
+        // If no more picks left, disable every button
+        if(countText.getText().toString().equals("0")) { // If amount of characters picked == 0, disable every button and add the finish one
+            for (Button bt : buttonList) {
+                bt.setEnabled(false);
+            }
+        }
+    }
+
+    private void setButtons() {
+        // Characters Buttons
+        demoniac.setEnabled(demoniacCounter == 0 == isAdding);
+        guard.setEnabled(guardCounter == 0 == isAdding);
+        masons.setEnabled(masonsCounter == 0 == isAdding);
+        medium.setEnabled(mediumCounter == 0 == isAdding);
+        werehamster.setEnabled(werehamsterCounter == 0 == isAdding);
+        villager.setEnabled(demoniacCounter + guardCounter + masonsCounter + mediumCounter
+                + villagerCounter + werehamsterCounter < provider.getPlayerCount() && isAdding
+                || villagerCounter > 5);
+        add.setEnabled(!isAdding);
+        remove.setEnabled(isAdding);
+    }
+
+    private void checkFinished() {
+        if(countText.getText().toString().equals("0")) { // If amount of characters picked == 0, disable every button and add the finish one
+            for (Button bt : buttonList) {
+                bt.setEnabled(false);
+            }
+        }
     }
 
     @Override
@@ -154,33 +198,36 @@ public class CharacterSelectionFragment extends Fragment implements View.OnClick
         switch (v.getId()) {
             case R.id.add:
                 isAdding = true;
+                setButtons();
+                checkFinished();
                 break;
             case R.id.remove:
                 isAdding = false;
+                setButtons();
                 break;
             case R.id.demoniac:
                 demoniacCounter += isAdding ? 1 : -1;
-                checkNoMorePlayers();
+                updateViews();
                 break;
             case R.id.guard:
                 guardCounter += isAdding ? 1 : -1;
-                checkNoMorePlayers();
+                updateViews();
                 break;
             case R.id.masons:
                 masonsCounter += isAdding ? 2 : -2;
-                checkNoMorePlayers();
+                updateViews();
                 break;
             case R.id.medium:
                 mediumCounter += isAdding ? 1 : -1;
-                checkNoMorePlayers();
+                updateViews();
                 break;
             case R.id.werehamster:
                 werehamsterCounter += isAdding ? 1 : -1;
-                checkNoMorePlayers();
+                updateViews();
                 break;
             case R.id.villager:
                 villagerCounter += isAdding ? 1 : -1;
-                checkNoMorePlayers();
+                updateViews();
                 break;
             case R.id.finish:
                 List<Card> characters = provider.getCharacters();
@@ -198,15 +245,8 @@ public class CharacterSelectionFragment extends Fragment implements View.OnClick
             default:
                 break;
         }
-        updateViews();
     }
 
-    private void checkNoMorePlayers() {
-        if(countText.getText().toString().equals("0")){ // If amount of characters picked == 0, disable every button and add the finish one
-            for(Button b : buttonList) {
-                b.setEnabled(false);
-            }
-            finish.setVisibility(View.VISIBLE);
-        }
+
     }
-}
+

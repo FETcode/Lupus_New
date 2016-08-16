@@ -37,7 +37,7 @@
 
 package com.FET.leonardo.scurcola.fragment;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -241,6 +241,10 @@ public class CharacterSelectionFragment extends Fragment implements View.OnClick
                 for (int i = 0; i < clairvoyantCounter; i++) characters.add(Card.Clairvoyant);
                 for (int i = 0; i < wolfCounter; i++) characters.add(Card.Wolf);
                 provider.getFragmentSwitcher().randomAssignment();
+                break;
+            case R.id.settingsCharacterSelection:
+                SettingsFragment s = new SettingsFragment();
+                s.show(getFragmentManager(), "SettingsDialog");
                 break;
             default:
                 break;

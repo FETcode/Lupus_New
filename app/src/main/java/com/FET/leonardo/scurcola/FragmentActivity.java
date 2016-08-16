@@ -39,12 +39,13 @@
 
 package com.FET.leonardo.scurcola;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -79,7 +80,7 @@ public class FragmentActivity extends AppCompatActivity implements DataProvider,
     private static final String PLAYER_COUNT = "PLAYER_COUNT";
     private static final String CHARACTERS = "CHARACTERS";
 
-    private static final String LAST_FRAGMENT_CLASS_NAME = "LAST_FRAGMENT";
+    private static final String FRAGMENT_MANAGER = "FRAGMENT_HISTORY";
 
 
     private List<Player> players; // All the active players
@@ -112,7 +113,7 @@ public class FragmentActivity extends AppCompatActivity implements DataProvider,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        fragmentSwitcher = new FragmentSwitcher(getFragmentManager());
+        fragmentSwitcher = new FragmentSwitcher(getSupportFragmentManager());
 
         // Probably initialize members with default values for a new instance
         initializeVariables();
@@ -171,12 +172,7 @@ public class FragmentActivity extends AppCompatActivity implements DataProvider,
             characters = gson.fromJson(charactersJSON, cardList);
         }
 
-
-           String lastFragmentClassName = prefs.getString(LAST_FRAGMENT_CLASS_NAME, null);
-        /*if (lastFragmentClassName == null || !fragmentSwitcher.loadFragmentByClassName(lastFragmentClassName)) {
-            fragmentSwitcher.main();
-        }*/
-        fragmentSwitcher.main();
+        fragmentSwitcher.restore(gson, prefs, FRAGMENT_MANAGER);
     }
 
 
@@ -191,6 +187,11 @@ public class FragmentActivity extends AppCompatActivity implements DataProvider,
         highest = new ArrayList<>();
         players = new ArrayList<>();
         characters = new ArrayList<>();
+        village = null;
+        isGoodEnd = false;
+        lastText = "";
+        playerCount = 9;
+        lastLynched = null;
     }
 
     @Override
@@ -230,7 +231,7 @@ public class FragmentActivity extends AppCompatActivity implements DataProvider,
         editor.putString(CHARACTERS, gson.toJson(characters));
 
 
-        editor.putString(LAST_FRAGMENT_CLASS_NAME, fragmentSwitcher.getCurrentFragment().getClass().getName());
+        fragmentSwitcher.save(gson, editor, FRAGMENT_MANAGER);
         editor.apply();
     }
 
@@ -449,6 +450,18 @@ public class FragmentActivity extends AppCompatActivity implements DataProvider,
     @Override
     public FragmentSwitcher getFragmentSwitcher() {
         return fragmentSwitcher;
+    }
+
+    @Override
+    public void reset() {
+        getSharedPreferences("X", Context.MODE_PRIVATE).edit().clear().apply();
+        initializeVariables();
+    }
+
+    @Override
+    public void hideSoftKeyBoard(View v) {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
     @Override

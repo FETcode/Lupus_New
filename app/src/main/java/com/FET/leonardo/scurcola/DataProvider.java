@@ -37,6 +37,8 @@
 
 package com.FET.leonardo.scurcola;
 
+import android.view.View;
+
 import java.util.List;
 
 /**
@@ -45,6 +47,8 @@ import java.util.List;
  * @author F43nd1r
  */
 public interface DataProvider {
+
+    void reset();
 
     List<Player> getAlivePlayers();
     List<Player> getRecentlyKilledPlayers();
@@ -92,6 +96,8 @@ public interface DataProvider {
 
     int getPlayerCount();
     void setPlayerCount(int count);
+
+    void hideSoftKeyBoard(View v);
 
     List<Card> getCharacters();
 

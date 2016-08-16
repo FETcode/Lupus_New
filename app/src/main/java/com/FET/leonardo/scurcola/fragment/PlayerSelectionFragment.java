@@ -37,7 +37,7 @@
 
 package com.FET.leonardo.scurcola.fragment;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -88,6 +88,15 @@ public class PlayerSelectionFragment extends Fragment implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        provider.getFragmentSwitcher().nameSelection();
+        switch (v.getId()){
+            case R.id.settingsPlayerSelection:
+                SettingsFragment s = new SettingsFragment();
+                s.show(getFragmentManager(), "SettingsDialog");
+                break;
+            case R.id.nextPlayerSelection:
+                provider.getFragmentSwitcher().nameSelection();
+                break;
+        }
+
     }
 }

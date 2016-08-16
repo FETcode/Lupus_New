@@ -37,9 +37,10 @@
 
 package com.FET.leonardo.scurcola;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.content.SharedPreferences;
 
 import com.FET.leonardo.scurcola.fragment.CharacterSelectionFragment;
 import com.FET.leonardo.scurcola.fragment.GameFragment;
@@ -55,6 +56,11 @@ import com.FET.leonardo.scurcola.fragment.NameSelectionFragment;
 import com.FET.leonardo.scurcola.fragment.PlayerSelectionFragment;
 import com.FET.leonardo.scurcola.fragment.RandomAssignmentFragment;
 import com.FET.leonardo.scurcola.fragment.VillageFragment;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -62,7 +68,7 @@ import com.FET.leonardo.scurcola.fragment.VillageFragment;
  *
  * @author F43nd1r
  */
-public class FragmentSwitcher {
+public class FragmentSwitcher{
 
     private final FragmentManager fragmentManager;
     private Fragment currentFragment;
@@ -141,25 +147,60 @@ public class FragmentSwitcher {
         transact();
     }
 
-    public void back(){
+    public void back() {
         fragmentManager.popBackStackImmediate();
+        currentFragment = getFragmentByClassName(fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1).getName());
     }
 
-    public boolean loadFragmentByClassName(String className){
-        try {
-            currentFragment = (Fragment) Class.forName(className).newInstance();
-            transact();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+    public void restore(Gson gson, SharedPreferences prefs, String key) {
+        String saved = prefs.getString(key, null);
+        if (saved != null) {
+            List<String> classNames = gson.fromJson(saved, new TypeToken<List<String>>() {
+            }.getType());
+            for (String className : classNames){
+                currentFragment = getFragmentByClassName(className);
+                if(currentFragment != null) {
+                    transact(false);
+                }
+            }
+        }
+        if(currentFragment == null){
+            main();
         }
     }
 
-    private void transact() {
-//TODO add animation here
+    public void save(Gson gson, SharedPreferences.Editor prefEditor, String key) {
+        List<String> classNames = new ArrayList<>();
+        for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
+            classNames.add(fragmentManager.getBackStackEntryAt(i).getName());
+        }
+        prefEditor.putString(key, gson.toJson(classNames));
+    }
 
-        fragmentManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).replace(android.R.id.content, currentFragment).addToBackStack(null).commit();
+    private Fragment getFragmentByClassName(String className) {
+        Fragment fragment = fragmentManager.findFragmentByTag(className);
+        if (fragment == null) {
+            try {
+                fragment = (Fragment) Class.forName(className).newInstance();
+            } catch (Exception ignored) {
+            }
+        }
+        return fragment;
+    }
+
+    private void transact() {
+        transact(true);
+    }
+
+    private void transact(boolean animate) {
+        String className = currentFragment.getClass().getName();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        if(animate) {
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        }
+        transaction.replace(android.R.id.content, currentFragment, className)
+                .addToBackStack(className)
+                .commit();
     }
 
     public Fragment getCurrentFragment() {

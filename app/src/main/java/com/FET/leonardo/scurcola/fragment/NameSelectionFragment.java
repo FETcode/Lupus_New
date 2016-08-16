@@ -37,7 +37,7 @@
 
 package com.FET.leonardo.scurcola.fragment;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -48,6 +48,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,6 +71,7 @@ public class NameSelectionFragment extends Fragment implements View.OnClickListe
     private Button next;
     private Button back;
     private Button finish;
+    private ImageButton settings;
     private EditText namesDisplay; // Where the user enters the names
     private TextView whoIsMaster; // Our question to the user
     private TextView playersLeft;
@@ -79,7 +81,8 @@ public class NameSelectionFragment extends Fragment implements View.OnClickListe
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE|WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
 
         System.out.println("[---------------------------------------------------------]");
         System.out.println("[-------------------- DEBUGGING LUPUS --------------------]");
@@ -89,6 +92,7 @@ public class NameSelectionFragment extends Fragment implements View.OnClickListe
         provider = (DataProvider) getActivity();
         View v = inflater.inflate(R.layout.name_selection, container, false);
         namesDisplay = (EditText) v.findViewById(R.id.names);
+
         namesDisplay.setText(provider.getLastTextInput());
         namesDisplay.addTextChangedListener(new TextWatcher() {
             @Override
@@ -104,9 +108,11 @@ public class NameSelectionFragment extends Fragment implements View.OnClickListe
                 provider.setLastTextInput(s.toString());
             }
         });
+
         next = (Button) v.findViewById(R.id.next);
         finish = (Button) v.findViewById(R.id.finish);
         back = (Button) v.findViewById(R.id.back);
+        settings = (ImageButton) v.findViewById(R.id.settingsNameSelection);
         whoIsMaster = (TextView) v.findViewById(R.id.whoMaster);
         playersLeft = (TextView) v.findViewById(R.id.playersLeft);
         players = provider.getAlivePlayers();
@@ -125,6 +131,10 @@ public class NameSelectionFragment extends Fragment implements View.OnClickListe
                 break;
             case R.id.finish:
                 toNextActivity();
+                break;
+            case R.id.settingsNameSelection:
+                SettingsFragment s = new SettingsFragment();
+                s.show(getFragmentManager(), "SettingsDialog");
                 break;
         }
     }
@@ -212,8 +222,11 @@ public class NameSelectionFragment extends Fragment implements View.OnClickListe
                     Card.Clairvoyant, Card.Wolf, Card.Wolf));
 
             provider.getFragmentSwitcher().randomAssignment();
+            provider.hideSoftKeyBoard(namesDisplay);
         } else { // If there are more than 9 players
             provider.getFragmentSwitcher().characterSelection();
+            provider.hideSoftKeyBoard(namesDisplay);
+
         }
     }
 }

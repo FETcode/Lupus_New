@@ -37,9 +37,7 @@
 
 package com.FET.leonardo.scurcola.fragment;
 
-import android.app.Fragment;
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -65,8 +63,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        SharedPreferences preferences = getActivity().getSharedPreferences("X", Context.MODE_PRIVATE);
-        preferences.edit().clear().apply();
+        provider.reset();
 
         // Debugging
         System.out.println("[-------------------- DEBUGGING LUPUS --------------------]");

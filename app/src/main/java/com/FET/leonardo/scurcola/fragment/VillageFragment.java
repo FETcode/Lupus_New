@@ -37,7 +37,7 @@
 
 package com.FET.leonardo.scurcola.fragment;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -45,6 +45,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -64,6 +65,8 @@ public class VillageFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE|WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
         provider = (DataProvider) getActivity();
         View v = inflater.inflate(R.layout.village, container, false);
         villageText = (EditText) v.findViewById(R.id.village);
@@ -87,13 +90,22 @@ public class VillageFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        String village = villageText.getText().toString();
-        if (village.equals("")) {
-            Toast.makeText(getActivity(), "Inserisci il nome del villaggio!", Toast.LENGTH_SHORT).show();
-        } else {
-            provider.setVillage(village);
-            provider.setLastTextInput("");
-            provider.getFragmentSwitcher().playerSelection();
+        switch (v.getId()){
+            case R.id.settingsVillage:
+                SettingsFragment s = new SettingsFragment();
+                s.show(getFragmentManager(), "SettingsDialog");
+                break;
+            case R.id.next:
+                String village = villageText.getText().toString();
+                if (village.equals("")) {
+                    Toast.makeText(getActivity(), "Inserisci il nome del villaggio!", Toast.LENGTH_SHORT).show();
+                } else {
+                    provider.setVillage(village);
+                    provider.setLastTextInput("");
+                    provider.getFragmentSwitcher().playerSelection();
+                }
+                break;
         }
+
     }
 }

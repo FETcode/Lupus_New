@@ -37,7 +37,7 @@
 
 package com.FET.leonardo.scurcola.fragment;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.ArrayRes;
 import android.support.annotation.Nullable;
@@ -84,10 +84,18 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.nextMessage:
+                System.out.println("NextMessage - Start");
                 game();
+                System.out.println("NextMessage - End");
                 break;
             case R.id.playersList:
+                System.out.println("PlayersList - Start");
                 lookUpPlayers();
+                System.out.println("PlayersList - End");
+                break;
+            case R.id.settingsGame:
+                SettingsFragment s = new SettingsFragment();
+                s.show(getFragmentManager(), "SettingsDialog");
                 break;
             default:
                 break;
@@ -150,8 +158,10 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                         }
                         if (provider.getMedium() == null) {
                             provider.incrementNightInsideCounter();
+                            provider.incrementNightInsideCounter();
                         }
                         if (provider.getGuard() == null) {
+                            provider.incrementNightInsideCounter();
                             provider.incrementNightInsideCounter();
                         }
                         provider.incrementNightInsideCounter();
@@ -173,6 +183,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                             }
                         }
                         if (provider.getGuard() == null) {
+                            provider.incrementNightInsideCounter();
                             provider.incrementNightInsideCounter();
                         }
                         provider.incrementNightInsideCounter();

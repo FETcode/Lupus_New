@@ -37,9 +37,9 @@
 
 package com.FET.leonardo.scurcola.fragment;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,13 +63,20 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        provider.reset();
+        switch (v.getId()){
+            case R.id.restartButton:
+                RestartDialog restartDialog = new RestartDialog();
+                restartDialog.show(getFragmentManager(), "RestartDialog");
+                break;
+            case R.id.play:
+                provider.reset();
 
-        // Debugging
-        System.out.println("[-------------------- DEBUGGING LUPUS --------------------]");
-        System.out.println("[+] Cleared!");
-        //
+                // Debugging
+                System.out.println("[-------------------- DEBUGGING LUPUS --------------------]");
+                System.out.println("[+] Cleared!");
+                //
 
-        provider.getFragmentSwitcher().village();
+                provider.getFragmentSwitcher().village();
+        }
     }
 }

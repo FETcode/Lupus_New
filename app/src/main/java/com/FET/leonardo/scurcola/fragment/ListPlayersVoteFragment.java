@@ -61,7 +61,7 @@ import java.util.Comparator;
  * @author F43nd1r
  */
 
-public class ListPlayersVoteFragment extends Fragment {
+public class ListPlayersVoteFragment extends Fragment implements View.OnClickListener {
 
     private DataProvider provider;
     private int votes = 0;
@@ -95,7 +95,7 @@ public class ListPlayersVoteFragment extends Fragment {
                         }
                     });
                     provider.getHighestVotedPlayers().clear();
-                    provider.getMessages().add("Il villaggio ha i propri sospettati:");
+                    provider.getMessages().add(getString(R.string.suspects));
                     Player first = players.get(players.size() - 1);
                     Player second = players.get(players.size() - 2);
                     if(first.getCount() > 0) {
@@ -112,5 +112,16 @@ public class ListPlayersVoteFragment extends Fragment {
         });
         myList.setAdapter(adapter);
         return v;
+    }
+
+    // Settings Button
+    @Override
+    public void onClick(View v){
+        switch (v.getId()){
+            case R.id.restartButton:
+                RestartDialog restartDialog = new RestartDialog();
+                restartDialog.show(getFragmentManager(), "RestartDialog");
+                break;
+        }
     }
 }

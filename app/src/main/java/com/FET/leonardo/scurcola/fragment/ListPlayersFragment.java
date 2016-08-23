@@ -37,9 +37,10 @@
 
 package com.FET.leonardo.scurcola.fragment;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -68,14 +69,24 @@ public class ListPlayersFragment extends Fragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         provider = (DataProvider) getActivity();
         View v = inflater.inflate(R.layout.list_players, container, false);
+        View root = v.getRootView();
+
+        if (provider.isNight()) {
+            // Night starts
+            root.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.darkBlue));
+        } else {
+            // Day starts
+            root.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.lightBlue));
+        }
 
         final ArrayList<Player> players = new ArrayList<>(provider.getAlivePlayers());
         for (Player player : players) {
             player.setCount(0);
         }
-        RecyclerView myList = (RecyclerView) v.findViewById(R.id.playersVote);
+        final RecyclerView myList = (RecyclerView) v.findViewById(R.id.playersVote);
         myList.setLayoutManager(new LinearLayoutManager(getActivity()));
         final CharactersAdapter adapter = new CharactersAdapter(players);
+
         adapter.setOnEntryClickListener(new CharactersAdapter.OnEntryClickListener() {
             @Override
             public void onEntryClick(View view, int position) {
@@ -93,10 +104,12 @@ public class ListPlayersFragment extends Fragment implements View.OnClickListene
                 provider.getFragmentSwitcher().back();
                 System.out.println("Back executed.");
                 break;
-            default:
-                System.out.println("Default executed.");
+            case R.id.restartButton:
+                RestartDialog restartDialog = new RestartDialog();
+                restartDialog.show(getFragmentManager(), "RestartDialog");
                 break;
-        }
+            }
         }
     }
+
 

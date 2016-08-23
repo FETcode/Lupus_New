@@ -37,9 +37,9 @@
 
 package com.FET.leonardo.scurcola.fragment;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -47,6 +47,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.FET.leonardo.scurcola.DataProvider;
@@ -61,6 +62,7 @@ public class VillageFragment extends Fragment implements View.OnClickListener {
 
     private DataProvider provider;
     private EditText villageText;
+    private ImageButton restartButton;
 
     @Nullable
     @Override
@@ -69,7 +71,10 @@ public class VillageFragment extends Fragment implements View.OnClickListener {
 
         provider = (DataProvider) getActivity();
         View v = inflater.inflate(R.layout.village, container, false);
+
+        restartButton = (ImageButton) getActivity().findViewById(R.id.restartButton);
         villageText = (EditText) v.findViewById(R.id.village);
+
         villageText.setText(provider.getLastTextInput());
         villageText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -91,9 +96,9 @@ public class VillageFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.settingsVillage:
-                SettingsFragment s = new SettingsFragment();
-                s.show(getFragmentManager(), "SettingsDialog");
+            case R.id.restartButton:
+                RestartDialog restartDialog = new RestartDialog();
+                restartDialog.show(getFragmentManager(), "RestartDialog");
                 break;
             case R.id.next:
                 String village = villageText.getText().toString();
@@ -103,6 +108,7 @@ public class VillageFragment extends Fragment implements View.OnClickListener {
                     provider.setVillage(village);
                     provider.setLastTextInput("");
                     provider.getFragmentSwitcher().playerSelection();
+                    provider.hideSoftKeyBoard(restartButton);
                 }
                 break;
         }

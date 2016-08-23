@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="white">#ffffff</color>
+    <!-- Official two Lupus colors -->
+    <color name="lightBlue">#439fde</color>
+    <color name="darkBlue">#0c1416</color>
 </resources>

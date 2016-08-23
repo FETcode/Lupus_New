@@ -47,9 +47,11 @@ import java.util.ArrayList;
 
 public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.CoursesViewHolder> {
 
+
     public class CoursesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        final TextView name;
-        final TextView counter;
+
+        TextView name;
+        TextView counter;
 
         CoursesViewHolder(View itemView) {
             super(itemView);
@@ -90,6 +92,7 @@ public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.CoursesV
         Player player = mArrayCourses.get(position);
         holder.name.setText(player.getName());
         holder.counter.setText(String.valueOf(player.getCount()));
+
     }
 
     @Override

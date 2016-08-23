@@ -17,27 +17,19 @@
         android:transcriptMode="alwaysScroll"
         android:stackFromBottom="true"
         android:layout_gravity="center_vertical"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:headerDividersEnabled="false" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <ImageButton
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:id="@+id/settingsGame"
-            android:src="@mipmap/ic_settings_white_24dp"
-            android:onClick="onClick"
-            />
-
         <Button
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:text="@string/next"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:onClick="onClick"
             android:id="@+id/nextMessage"/>
 

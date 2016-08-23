@@ -61,7 +61,7 @@ import java.util.Iterator;
  * @author F43nd1r
  */
 
-public class ListPlayersGuardFragment extends Fragment {
+public class ListPlayersGuardFragment extends Fragment implements View.OnClickListener {
 
     private DataProvider provider;
 
@@ -93,5 +93,16 @@ public class ListPlayersGuardFragment extends Fragment {
         });
         myList.setAdapter(adapter);
         return v;
+    }
+
+    // Settings Button
+    @Override
+    public void onClick(View v){
+        switch (v.getId()){
+            case R.id.restartButton:
+                RestartDialog restartDialog = new RestartDialog();
+                restartDialog.show(getFragmentManager(), "RestartDialog");
+                break;
+        }
     }
 }

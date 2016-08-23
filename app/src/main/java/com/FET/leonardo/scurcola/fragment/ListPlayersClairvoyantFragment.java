@@ -61,7 +61,7 @@ import java.util.Iterator;
  * @author F43nd1r
  */
 
-public class ListPlayersClairvoyantFragment extends Fragment {
+public class ListPlayersClairvoyantFragment extends Fragment implements View.OnClickListener{
 
     private DataProvider provider;
 
@@ -88,11 +88,23 @@ public class ListPlayersClairvoyantFragment extends Fragment {
             public void onEntryClick(View view, int position) {
                 Player player = playersNoClairvoyant.get(position);
                 boolean isWolf = provider.probe(player);
-                provider.getMessages().add(player.getName() + (isWolf ? "" : " non") + " è un lupo!");
+                provider.getMessages().add(player.getName() + " " + (isWolf ? getString(R.string.isAWolf) : getString(R.string.isNotAWolf)));
                 provider.getFragmentSwitcher().back();
             }
         });
         myList.setAdapter(adapter);
         return v;
     }
+
+    // Settings Button
+    @Override
+    public void onClick(View v){
+        switch (v.getId()){
+            case R.id.restartButton:
+                RestartDialog restartDialog = new RestartDialog();
+                restartDialog.show(getFragmentManager(), "RestartDialog");
+                break;
+        }
+    }
+
 }

@@ -62,7 +62,7 @@ import java.util.Iterator;
  * @author F43nd1r
  */
 
-public class ListPlayersLynchFragment extends Fragment {
+public class ListPlayersLynchFragment extends Fragment implements View.OnClickListener {
 
     private DataProvider provider;
     private int votes = 0;
@@ -102,7 +102,7 @@ public class ListPlayersLynchFragment extends Fragment {
                         }
                     });
                     provider.lynch(highest.get(highest.size() - 1));
-                    provider.getMessages().add(provider.getLastLynched().getName() + " è stato linciato dai popolani.");
+                    provider.getMessages().add(provider.getLastLynched().getName() + " " + getString(R.string.hasBeenLynched));
                     for (Player v : highest){
                         v.setCount(0);
                     }
@@ -112,5 +112,16 @@ public class ListPlayersLynchFragment extends Fragment {
         });
         myList.setAdapter(adapter);
         return v;
+    }
+
+    // Settings Button
+    @Override
+    public void onClick(View v){
+        switch (v.getId()){
+            case R.id.restartButton:
+                RestartDialog restartDialog = new RestartDialog();
+                restartDialog.show(getFragmentManager(), "RestartDialog");
+                break;
+        }
     }
 }

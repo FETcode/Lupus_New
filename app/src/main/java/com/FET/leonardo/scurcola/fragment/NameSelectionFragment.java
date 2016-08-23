@@ -37,9 +37,9 @@
 
 package com.FET.leonardo.scurcola.fragment;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -48,7 +48,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,7 +70,6 @@ public class NameSelectionFragment extends Fragment implements View.OnClickListe
     private Button next;
     private Button back;
     private Button finish;
-    private ImageButton settings;
     private EditText namesDisplay; // Where the user enters the names
     private TextView whoIsMaster; // Our question to the user
     private TextView playersLeft;
@@ -112,7 +110,6 @@ public class NameSelectionFragment extends Fragment implements View.OnClickListe
         next = (Button) v.findViewById(R.id.next);
         finish = (Button) v.findViewById(R.id.finish);
         back = (Button) v.findViewById(R.id.back);
-        settings = (ImageButton) v.findViewById(R.id.settingsNameSelection);
         whoIsMaster = (TextView) v.findViewById(R.id.whoMaster);
         playersLeft = (TextView) v.findViewById(R.id.playersLeft);
         players = provider.getAlivePlayers();
@@ -132,9 +129,9 @@ public class NameSelectionFragment extends Fragment implements View.OnClickListe
             case R.id.finish:
                 toNextActivity();
                 break;
-            case R.id.settingsNameSelection:
-                SettingsFragment s = new SettingsFragment();
-                s.show(getFragmentManager(), "SettingsDialog");
+            case R.id.restartButton:
+                RestartDialog restartDialog = new RestartDialog();
+                restartDialog.show(getFragmentManager(), "RestartDialog");
                 break;
         }
     }
@@ -180,6 +177,7 @@ public class NameSelectionFragment extends Fragment implements View.OnClickListe
                 finish.setVisibility(View.VISIBLE); // see the Finish one,
                 namesDisplay.setVisibility(View.INVISIBLE); // and disable the EditText.
                 playersLeft.setVisibility(View.INVISIBLE);
+                provider.hideSoftKeyBoard(namesDisplay); // Dismiss the keyboard
             }
             provider.setLastTextInput("");
         }

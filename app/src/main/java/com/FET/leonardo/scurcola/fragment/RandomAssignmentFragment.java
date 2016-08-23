@@ -98,15 +98,23 @@ public class RandomAssignmentFragment extends Fragment implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        List<Player> players = provider.getAlivePlayers();
-        if (count < players.size()) {
-            card.setText(players.get(count).getCard().name());
-            name.setText(players.get(count).getName());
-            count++;
-        } else if (pick.getText().equals(getString(R.string.finish))) {
-            provider.getFragmentSwitcher().game();
-        } else if (count == players.size()) {
-            pick.setText(R.string.finish);
+        switch (v.getId()){
+            case R.id.restartButton:
+                RestartDialog restartDialog = new RestartDialog();
+                restartDialog.show(getFragmentManager(), "RestartDialog");
+                break;
+            case R.id.pick:
+                List<Player> players = provider.getAlivePlayers();
+                if (count < players.size()) {
+                    card.setText(players.get(count).getCard().name());
+                    name.setText(players.get(count).getName());
+                    count++;
+                } else if (pick.getText().equals(getString(R.string.finish))) {
+                    provider.getFragmentSwitcher().game();
+                } else if (count == players.size()) {
+                    pick.setText(R.string.finish);
+                }
+                break;
         }
     }
 }

@@ -37,11 +37,14 @@
 
 package com.FET.leonardo.scurcola.fragment;
 
-import android.support.v4.app.Fragment;
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.support.annotation.ArrayRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,14 +68,57 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
     private ArrayAdapter<String> adapter;
     private DataProvider provider;
+    private View root;
+    private int lightBlue;
+    private int darkBlue;
+    private ValueAnimator nightAnimator;
+    private ValueAnimator dayAnimator;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         provider = (DataProvider) getActivity();
-        View v = inflater.inflate(R.layout.game, container, false);
+        final View v = inflater.inflate(R.layout.game, container, false);
+        root = v.getRootView();
         ListView screen = (ListView) v.findViewById(R.id.screen);
-        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, provider.getMessages());
+        lightBlue = ContextCompat.getColor(getContext(), R.color.lightBlue);
+        darkBlue = ContextCompat.getColor(getContext(), R.color.darkBlue);
+
+        // Background Animation Day/Night
+        dayAnimator = ValueAnimator.ofObject(new ArgbEvaluator(), darkBlue, lightBlue);
+        dayAnimator.setDuration(3000); // milliseconds
+        dayAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+                root.setBackgroundColor((int) animator.getAnimatedValue());
+            }
+
+        });
+
+
+        nightAnimator = ValueAnimator.ofObject(new ArgbEvaluator(), lightBlue, darkBlue);
+        nightAnimator.setDuration(3000); // milliseconds
+        nightAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+                root.setBackgroundColor((int) animator.getAnimatedValue());
+            }
+
+        });
+        // End Animation
+
+        // Set first background to Night
+        if (provider.getDayInsideCounter() > 1 || provider.getNightInsideCounter() == 1) {
+            root.setBackgroundColor(lightBlue);
+        }
+
+        if (provider.getNightInsideCounter() > 1 || provider.getNightCounter() == 1 || !provider.isNight() && provider.getDayInsideCounter() == 1) {
+            root.setBackgroundColor(darkBlue);
+        }
+
+        adapter = new ArrayAdapter<>(getActivity(), R.layout.listview_text_color, provider.getMessages());
         screen.setAdapter(adapter);
         if (provider.getNightCounter() == 1 && provider.getMessages().size() == 0) {
             greetings();
@@ -93,13 +139,10 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                 lookUpPlayers();
                 System.out.println("PlayersList - End");
                 break;
-            case R.id.settingsGame:
-                SettingsFragment s = new SettingsFragment();
-                s.show(getFragmentManager(), "SettingsDialog");
+            case R.id.restartButton:
+                RestartDialog restartDialog = new RestartDialog();
+                restartDialog.show(getFragmentManager(), "RestartDialog");
                 break;
-            default:
-                break;
-
         }
     }
 
@@ -129,10 +172,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                         break;
                     case 3:
                         wolvesShow(); // Wolves see each other
-                        provider.incrementNightInsideCounter();
-                        break;
-                    default:
-                        write(R.array.goodMorning, randInt(0, 7), provider.getVillage()); // It's morning
                         provider.resetNightInsideCounter(); // Reset the internal counter
                         provider.incrementNightCounter(); // Increment the counter to switch to the 2nd night next time
                         provider.setNight(false); // Night has ended
@@ -142,6 +181,21 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             default: // All the other nights
                 switch (provider.getNightInsideCounter()) {
                     case 1:
+                        //Check if every Wolf has been killed
+                        System.out.println("WOLVES LEFT " + provider.getWolvesLeft());
+                        if (provider.getWolvesLeft() == 0) {
+                            // Game over. Villagers win.
+                            provider.setGoodEnd(true);
+                            provider.getFragmentSwitcher().gameOver();
+                        }
+                        if (provider.getVillagersLeft() == provider.getWolvesLeft()) {
+                            //Game over. Wolves win
+                            provider.setGoodEnd(false);
+                            provider.getFragmentSwitcher().gameOver();
+                        }
+
+                        nightAnimator.start();
+
                         write(R.string.night, provider.getVillage()); // Say it's night, everybody close their eyes
                         provider.getRecentlyKilledPlayers().clear(); // Clear all the recently killed players to get the new ones
                         provider.incrementNightInsideCounter();
@@ -176,10 +230,10 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                         if (provider.getMedium() != null) {
                             if (provider.getLastLynched().getCard() == Card.Wolf) { // Check if the last lynched player was a Wolf
                                 // Say he is
-                                write(provider.getLastLynched().getName() + " è un lupo!");
+                                write(provider.getLastLynched().getName() + " " + getString(R.string.isAWolf));
                             } else {
                                 // Say he's not
-                                write(provider.getLastLynched().getName() + " non è un lupo.");
+                                write(provider.getLastLynched().getName() + " " + getString(R.string.isNotAWolf));
                             }
                         }
                         if (provider.getGuard() == null) {
@@ -210,16 +264,6 @@ public class GameFragment extends Fragment implements View.OnClickListener {
                         /* -- Let 'em choose -- */
                         provider.getFragmentSwitcher().wolves();
                         /* -------------------- */
-                        provider.incrementNightInsideCounter();
-                        break;
-                    default:
-                        if (provider.getVillagersLeft() == provider.getWolvesLeft()) {
-                            //Game over. Wolves win
-                            provider.setGoodEnd(false);
-                            provider.getFragmentSwitcher().gameOver();
-                        }
-
-                        write(R.array.goodMorning, randInt(0, 7), provider.getVillage()); // It's morning
                         provider.resetNightInsideCounter(); // Reset the internal counter
                         provider.incrementNightCounter(); // Increment the counter to switch to the next night
                         provider.setNight(false); // Night has ended
@@ -236,31 +280,32 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             case 1: // First Day
                 switch (provider.getDayInsideCounter()) {
                     case 1:
-                        write(R.string.savagedMaster); // Display the Master's died
+                        dayAnimator.start();
+                        write(R.array.goodMorning, randInt(0, 7), provider.getVillage()); // It's morning
                         provider.incrementDayInsideCounter();
                         break;
                     case 2:
-                        write(R.string.talk); // Players have a max of 3 minutes to discuss
+                        write(R.string.savagedMaster); // Display the Master's died
                         provider.incrementDayInsideCounter();
                         break;
                     case 3:
+                        write(R.string.talk); // Players have a max of 3 minutes to discuss
+                        provider.incrementDayInsideCounter();
+                        break;
+                    case 4:
                         provider.incrementDayInsideCounter();
                         /* -- Let 'em vote -- */
-                        System.out.println("[1] The players are " + provider.getAlivePlayers().size() + ".");
                         provider.getFragmentSwitcher().vote();
                          /* ----------------- */
                         break;
-                    case 4:
+                    case 5:
                         write(R.string.speeches); // Those accused have their own speech
                         provider.incrementDayInsideCounter();
                         break;
-                    case 5:
+                    case 6:
                         /* -- Let 'em choice -- */
                         provider.getFragmentSwitcher().lynch();
                         /* -------------------- */
-                        provider.incrementDayInsideCounter();
-                        break;
-                    default:
                         provider.resetDayInsideCounter();
                         provider.incrementDayCounter();
                         provider.setNight(true);
@@ -270,51 +315,45 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             default: // All the other days
                 switch (provider.getDayInsideCounter()) {
                     case 1:
-                        List<Player> recentlyKilled = provider.getRecentlyKilledPlayers();
-                        if (recentlyKilled.size() == 0) {
-                            write("Stanotte nessuno è stato ucciso.");
-                        } else {
-                            for (int i = 0; i < recentlyKilled.size(); i++) {
-                                write(recentlyKilled.get(i).getName() + " è stato ucciso questa notte!");
-                            }
-                        }
-                        provider.incrementDayInsideCounter();
-                        break;
-                    case 2:
-                        write(R.string.talk); // Players have a max of 3 minutes to discuss
-                        provider.incrementDayInsideCounter();
-                        break;
-                    case 3:
-                        provider.incrementDayInsideCounter();
-                        /* -- Let 'em vote -- */
-                        provider.getFragmentSwitcher().vote();
-                        /* -------------------- */
-                        break;
-                    case 4:
-                        write(R.string.speeches); // Those accused have their own speech
-                        provider.incrementDayInsideCounter();
-                        break;
-                    case 5:
-                        /* -- Let 'em choice -- */
-                        provider.getFragmentSwitcher().lynch();
-                        /* -------------------- */
-                        provider.incrementDayInsideCounter();
-                        break;
-                    default:
-                        // Display who's been killed
-
-                        //Check if every Wolf has been killed
-                        if (provider.getWolvesLeft() == 0) {
-                            // Game over. Villagers win.
-                            provider.setGoodEnd(true);
-                            provider.getFragmentSwitcher().gameOver();
-                        }
                         if (provider.getVillagersLeft() == provider.getWolvesLeft()) {
                             //Game over. Wolves win
                             provider.setGoodEnd(false);
                             provider.getFragmentSwitcher().gameOver();
                         }
+                        dayAnimator.start();
 
+                        write(R.array.goodMorning, randInt(0, 7), provider.getVillage()); // It's morning
+                        provider.incrementDayInsideCounter();
+                        break;
+                    case 2:
+                        List<Player> recentlyKilled = provider.getRecentlyKilledPlayers();
+                        if (recentlyKilled.size() == 0) {
+                            write(getString(R.string.noKilled));
+                        } else {
+                            for (int i = 0; i < recentlyKilled.size(); i++) {
+                                write(recentlyKilled.get(i).getName() + " " + getString(R.string.killed));
+                            }
+                        }
+                        provider.incrementDayInsideCounter();
+                        break;
+                    case 3:
+                        write(R.string.talk); // Players have a max of 3 minutes to discuss
+                        provider.incrementDayInsideCounter();
+                        break;
+                    case 4:
+                        provider.incrementDayInsideCounter();
+                        /* -- Let 'em vote -- */
+                        provider.getFragmentSwitcher().vote();
+                        /* -------------------- */
+                        break;
+                    case 5:
+                        write(R.string.speeches); // Those accused have their own speech
+                        provider.incrementDayInsideCounter();
+                        break;
+                    case 6:
+                        /* -- Let 'em choose -- */
+                        provider.getFragmentSwitcher().lynch();
+                        /* -------------------- */
                         provider.resetDayInsideCounter();
                         provider.incrementDayCounter();
                         provider.setNight(true);
@@ -385,4 +424,5 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     public void lookUpPlayers(){
         provider.getFragmentSwitcher().playersList();
     }
+
 }

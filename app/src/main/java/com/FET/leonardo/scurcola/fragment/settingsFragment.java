@@ -8,7 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.FET.leonardo.scurcola.DataProvider;
@@ -18,13 +18,13 @@ import com.FET.leonardo.scurcola.R;
 
 public class SettingsFragment extends DialogFragment {
     private DataProvider provider;
-    private EditText editText;
+    private ImageButton imageButton;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         provider = (DataProvider) getActivity();
-        editText = (EditText) getActivity().findViewById(R.id.names);
+        imageButton = (ImageButton) getActivity().findViewById(R.id.restartButton); //TODO Change the right ID
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.settings)
@@ -38,7 +38,7 @@ public class SettingsFragment extends DialogFragment {
                                 SharedPreferences preferences = getActivity().getSharedPreferences("X", Context.MODE_PRIVATE);
                                 preferences.edit().clear().apply();
                                 provider.getFragmentSwitcher().main();
-                                provider.hideSoftKeyBoard(editText);
+                                provider.hideSoftKeyBoard(imageButton);
                                 break;
                             case 1:
                                 //Credits

@@ -9,6 +9,7 @@
         android:textStyle="bold"
         android:padding="5dp"
         android:textAllCaps="true"
+        android:textColor="@color/white"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"/>
@@ -17,7 +18,8 @@
         android:textSize="20sp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:textColor="@color/white"/>
 
 
 </LinearLayout>

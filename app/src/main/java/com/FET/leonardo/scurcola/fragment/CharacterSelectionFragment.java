@@ -242,11 +242,9 @@ public class CharacterSelectionFragment extends Fragment implements View.OnClick
                 for (int i = 0; i < wolfCounter; i++) characters.add(Card.Wolf);
                 provider.getFragmentSwitcher().randomAssignment();
                 break;
-            case R.id.settingsCharacterSelection:
-                SettingsFragment s = new SettingsFragment();
-                s.show(getFragmentManager(), "SettingsDialog");
-                break;
-            default:
+            case R.id.restartButton:
+                RestartDialog restartDialog = new RestartDialog();
+                restartDialog.show(getFragmentManager(), "RestartDialog");
                 break;
         }
     }

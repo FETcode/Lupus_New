@@ -198,7 +198,7 @@ public class FragmentSwitcher{
         if(animate) {
             transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         }
-        transaction.replace(android.R.id.content, currentFragment, className)
+        transaction.replace(R.id.menuFragment, currentFragment, className)
                 .addToBackStack(className)
                 .commit();
     }

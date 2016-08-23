@@ -7,6 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/darkBlue"
     android:orientation="vertical">
 
     <TextView
@@ -18,6 +19,7 @@
         android:textAllCaps="true"
         android:textSize="25sp"
         android:textStyle="bold"
+        android:textColor="@color/white"
         android:id="@+id/clairvoyantQuestion" />
 
     <android.support.v7.widget.RecyclerView

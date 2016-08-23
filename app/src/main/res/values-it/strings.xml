@@ -11,6 +11,14 @@
     <string name="villagersWin">Il villaggio di %s è salvo!</string>
     <string name="wolvesWin">Lo hai sentito anche te?!</string>
     <string name="done">Fatto</string>
+    <string name="restart">Ricomincia</string>
+    <string name="isAWolf">è un lupo.</string>
+    <string name="isNotAWolf">non è un lupo.></string>
+    <string name="hasBeenLynched">è stato linciato.</string>
+    <string name="suspects">Il villaggio ha dei sospettati:</string>
+    <string name="noKilled">Stanotte nessuno è stato ucciso.</string>
+    <string name="killed">è stato ucciso stanotte.</string>
+
 
 
     <!-- Numbers-->
@@ -45,7 +53,6 @@
     <!-- PlayerSelection -->
     <string name="howManyPlayers">In quanti giocate?</string>
     <string name="whoMaster">Chi è il Master?</string>
-    <string name="whoPlays">Chi gioca?</string>
     <string name="master">Nome Master</string>
     <string name="player">Nome Giocatore</string>
     <string name="whoIsPlaying">Chi gioca?</string>
@@ -83,18 +90,6 @@
     <!-- Night Strings -->
     <string name="night" formatted="false">E\' notte a %s, tutti chiudono gli occhi.</string>
 
-
-    <!-- Day Strings
-    <string-array name="goodMorning" formated="false">
-        <item>Good Morning folks!</item>
-        <item>Sun\'s out, guns out.</item>
-        <item>Careless vampires burn, and you wake up!</item>
-        <item>Can\'t find the moon. Oh it\'s probably morning then..</item>
-        <item>Darkness flees from %s, wake up!</item>
-        <item>Sunlight manifests, it\'s morning %s!</item>
-        <item>Stars went to bed, and %s wakes up!</item>
-        <item>Be beep. Be beep. %s wake up!</item>
-    </string-array> -->
     <string-array name="goodMorning" formated="false">
         <item>Buon giorno a tutti!</item>
         <item>Il sole è fuori, voi pure.</item>
@@ -118,5 +113,18 @@
     <string name="lynchQuestion">Chi volete linciare?</string>
     <string name="questionMark">\?</string>
     <string name="players">Giocatori correnti</string>
+
+    <!-- Settings -->
+    <string name="settings">Impostazioni</string>
+
+    <string-array name="settingsOptions">
+        <item>Ricomincia partita</item>
+        <item>Crediti</item>
+    </string-array>
+
+    <!-- Restart Button -->
+    <string name="cancel">Annulla</string>
+    <string name="restartMessage">Vuoi iniziare una nuova partita? Tutti i tuoi progressi della partita corrente verranno persi.</string>
+    <string name="plus">+</string>
 </resources>
 

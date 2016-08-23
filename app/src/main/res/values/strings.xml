@@ -11,6 +11,14 @@
     <string name="villagersWin">%s village is safe!</string>
     <string name="wolvesWin">Did you hear that?</string>
     <string name="done">Done</string>
+    <string name="cancel">Cancel</string>
+    <string name="plus">+</string>
+    <string name="isAWolf">is a wolf.</string>
+    <string name="isNotAWolf">is not a wolf.</string>
+    <string name="hasBeenLynched">has been lynched.</string>
+    <string name="suspects">The village has some suspects:</string>
+    <string name="noKilled">Tonight nobody was killed.</string>
+    <string name="killed">has been killed tonight.</string>
 
 
     <!-- Numbers-->
@@ -117,8 +125,8 @@
         <item>Credits</item>
     </string-array>
 
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Restart Button -->
+    <string name="restart">Restart</string>
+    <string name="restartMessage">Do you want to start a new game? All the progress made in this game will be lost.</string>
 </resources>
 

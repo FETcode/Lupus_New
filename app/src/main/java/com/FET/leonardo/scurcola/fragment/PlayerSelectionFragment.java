@@ -89,12 +89,12 @@ public class PlayerSelectionFragment extends Fragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.settingsPlayerSelection:
-                SettingsFragment s = new SettingsFragment();
-                s.show(getFragmentManager(), "SettingsDialog");
-                break;
             case R.id.nextPlayerSelection:
                 provider.getFragmentSwitcher().nameSelection();
+                break;
+            case R.id.restartButton:
+                RestartDialog restartDialog = new RestartDialog();
+                restartDialog.show(getFragmentManager(), "RestartDialog");
                 break;
         }
 

@@ -112,6 +112,7 @@ public class FragmentActivity extends AppCompatActivity implements DataProvider,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.menu_fragment);
 
         fragmentSwitcher = new FragmentSwitcher(getSupportFragmentManager());
 

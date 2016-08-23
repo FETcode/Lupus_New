@@ -52,13 +52,4 @@
         android:text="@string/next"
         android:textColor="#39add1" />
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/settingsPlayerSelection"
-        android:src="@mipmap/ic_settings_white_24dp"
-        android:onClick="onClick"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
-
 </RelativeLayout>
